@@ -10,6 +10,8 @@ import { LocalStorageService } from '@app/shared/services';
 })
 export class CharactersCardComponent {
   @Input() character: ICharacter;
+  defaultImage = './assets/imgs/rickanmorty.png';
+  image = 'https://images.unsplash.com/photo-1443890923422-7819ed4101c0?fm=jpg';
   constructor(private localStorageService: LocalStorageService) {}
   toogleFavorite() {
     const isFavorite = this.character.isFavorite;

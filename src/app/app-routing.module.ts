@@ -20,16 +20,19 @@ const routes: Routes = [
     path: 'about',
     loadChildren: () => import('./pages/about/about.module').then(m => m.AboutModule)
   },
-  {
-    path: 'characters',
-    loadChildren: () =>
-      import('./pages/characters/characters/characters.module').then(m => m.CharactersModule)
-  },
+
   {
     path: 'characters-list',
     loadChildren: () =>
       import('./pages/characters/characters-list/characters-list.module').then(
         m => m.CharactersListModule
+      )
+  },
+  {
+    path: 'characters-detail',
+    loadChildren: () =>
+      import('./pages/characters/characters-detail/characters-detail.module').then(
+        m => m.CharactersDetailModule
       )
   },
   {

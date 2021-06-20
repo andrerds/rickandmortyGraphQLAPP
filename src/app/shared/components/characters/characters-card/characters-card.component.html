@@ -2,9 +2,17 @@
   <div class="id">
     {{ character.id }}
   </div>
-  <a [routerLink]="['/character-detail', character?.id]" class="card__link">
+
+  <a [routerLink]="['/characters-detail', character?.id]" class="card__link">
     <figure rel="preload" as="image" width="300" height="300">
-      <img width="300" height="300" [src]="character?.image" [alt]="character?.name" srcset="" />
+      <img
+        [defaultImage]="defaultImage"
+        [lazyLoad]="character?.image"
+        width="300"
+        height="300"
+        [alt]="character?.name"
+        srcset=""
+      />
     </figure>
   </a>
   <div class="card__details">

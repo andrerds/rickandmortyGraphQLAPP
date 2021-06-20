@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
+
 import { DataResponse, ICharacter, IEpisodes } from '@app/models';
 import { Apollo, gql } from 'apollo-angular';
-import { BehaviorSubject } from 'rxjs';
-import { map, pluck, take, tap, withLatestFrom } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { find, mergeMap, pluck, take, tap, withLatestFrom } from 'rxjs/operators';
 import { LocalStorageService } from './local-storage.service';
 
 const QUERY = gql`
@@ -31,11 +32,11 @@ const QUERY = gql`
   providedIn: 'root'
 })
 export class DataService {
-  private episodesSubject = new BehaviorSubject<IEpisodes[]>(null);
+  private episodesSubject = new BehaviorSubject<IEpisodes[]>([]);
   episodes$ = this.episodesSubject.asObservable();
 
-  private charecterSubject = new BehaviorSubject<ICharacter[]>(null);
-  charecter$ = this.charecterSubject.asObservable();
+  private characterSubject = new BehaviorSubject<ICharacter[]>([]);
+  character$ = this.characterSubject.asObservable();
   constructor(private apollo: Apollo, private localStorageService: LocalStorageService) {
     this.getDataAPI();
   }
@@ -63,21 +64,19 @@ export class DataService {
           });
           console.log(mapepisodes);
           this.episodesSubject.next(mapepisodes);
-          this.parseCharectersData(mapcharacters);
+          this.parseCharactersData(mapcharacters);
         })
       )
       .subscribe();
   }
 
-  private parseCharectersData(characters: ICharacter[]): void {
+  private parseCharactersData(characters: ICharacter[]): void {
     const currentFavoritos = this.localStorageService.getFavoritesCharacters();
     const newData = characters.map(character => {
-      const found = !!currentFavoritos.find(
-        (fav: ICharacter) => fav.idNumber === character.idNumber
-      );
+      const found = !!currentFavoritos.find((fav: ICharacter) => fav.id === character.id);
       return { ...character, isFavorite: found };
     });
-    this.charecterSubject.next(newData);
+    this.characterSubject.next(newData);
   }
 
   getCharacterByPage(pageNum: number) {
@@ -104,7 +103,7 @@ export class DataService {
       .valueChanges.pipe(
         take(1),
         pluck('data', 'characters'),
-        withLatestFrom(this.charecter$),
+        withLatestFrom(this.character$),
         tap(([apiResponse, characters]) => {
           characters.map(res => {
             return {
@@ -112,9 +111,16 @@ export class DataService {
               ...res
             };
           });
-          this.parseCharectersData([...characters, ...apiResponse.results]);
+          this.parseCharactersData([...characters, ...apiResponse.results]);
         })
       )
       .subscribe();
+  }
+
+  getDetails(id): Observable<ICharacter> {
+    return this.character$.pipe(
+      mergeMap((character: ICharacter[]) => character),
+      find((charcater: ICharacter) => charcater?.id === id)
+    );
   }
 }

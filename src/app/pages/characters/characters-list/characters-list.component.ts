@@ -16,7 +16,7 @@ import { DataService } from '@app/shared/services/data.service';
   styleUrls: ['./characters-list.component.scss']
 })
 export class CharactersListComponent implements OnInit {
-  characters$ = this.dataService.charecter$;
+  characters$ = this.dataService.character$;
   showBottom = false;
   private pageNum = 1;
   private scrollHeight = 500;
