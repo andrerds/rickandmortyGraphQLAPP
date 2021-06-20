@@ -12,14 +12,12 @@ export class LocalStorageService {
   }
 
   addOrRemoveFavorito(charecter: ICharacter) {
-    debugger;
     const { idNumber } = charecter;
-
     const currentsFavoritos = this.getFavoritesCharacters();
     const found = !!currentsFavoritos.find((fav: ICharacter) => {
-      fav.idNumber === idNumber;
+      return fav.idNumber === idNumber;
     });
-    found ? this.removeFavorito(Number(idNumber)) : this.addFavorito(charecter);
+    found ? this.removeFavorito(idNumber) : this.addFavorito(charecter);
   }
   private addFavorito(charecter: ICharacter) {
     try {
@@ -37,10 +35,12 @@ export class LocalStorageService {
   private removeFavorito(id) {
     try {
       const currentsFavoritos = this.getFavoritesCharacters();
-      const charecters = currentsFavoritos.filter(item => Number(item.id) !== Number(id));
+      const charecters = currentsFavoritos.filter(item => item.idNumber !== id);
       localStorage.setItem(MY_FAVORITES_RIKC, JSON.stringify([...charecters]));
+
       this.charactersFavSubject.next([...charecters]);
-      this.toastService.warning(`${charecters.name} removido dos favoritos`, 'RickAndMortyApp');
+
+      this.toastService.warning(`Removido dos favoritos`, 'RickAndMortyApp');
     } catch (error) {
       this.toastService.error(`Erro remover loscalstorage ${error}`, 'RickAndMortyApp');
       console.log('Erro Remver Favorites storage', error);

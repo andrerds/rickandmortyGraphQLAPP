@@ -4,14 +4,13 @@ import { SpinnerService } from '@app/shared/services/spinner.service';
 @Component({
   selector: 'app-spinner',
   templateUrl: './spinner.component.html',
-  styleUrls: ['./spinner.component.scss'],
-  providers: [SpinnerService]
+  styleUrls: ['./spinner.component.scss']
 })
 export class SpinnerComponent implements OnInit {
   isloading$;
-  constructor(private spinnerService: SpinnerService) {
+  constructor(private spinnerService: SpinnerService) {}
+
+  ngOnInit(): void {
     this.isloading$ = this.spinnerService.isLoading$;
   }
-
-  ngOnInit(): void {}
 }
