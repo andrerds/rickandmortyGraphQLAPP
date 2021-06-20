@@ -1,5 +1,6 @@
 export interface IEpisodes {
-  id: number;
+  id: string;
+  idNumber?: number;
   name: string;
   episode: string;
 }

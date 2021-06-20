@@ -3,28 +3,28 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CharactersListModule } from './pages/components/characters/characters-list.module';
-import { CharactersDetailsModule } from './pages/components/characters-details/characters-details.module';
+
 import { HeaderModule } from '@shared/components/header/header.module';
-import { RouterModule } from '@angular/router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GraphQLModule } from './graphql.module';
 import { HttpClientModule } from '@angular/common/http';
+import { ToastrModule } from 'ngx-toastr';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { SpinnerModule } from './shared/components';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    CharactersListModule,
-    CharactersDetailsModule,
     HeaderModule,
     GraphQLModule,
     HttpClientModule,
-
+    BrowserAnimationsModule,
+    SpinnerModule,
+    ToastrModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ICharacter } from '@app/models';
+import { LocalStorageService } from '@app/shared/services';
 
 @Component({
   selector: 'app-characters-card',
@@ -9,10 +10,12 @@ import { ICharacter } from '@app/models';
 })
 export class CharactersCardComponent {
   @Input() character: ICharacter;
+  constructor(private localStorageService: LocalStorageService) {}
   toogleFavorite() {
     const isFavorite = this.character.isFavorite;
     this.getIcon();
-    this.character.isFavorite = isFavorite;
+    this.character.isFavorite = !isFavorite;
+    this.localStorageService.addOrRemoveFavorito(this.character);
   }
   getIcon() {
     return this.character.isFavorite ? 'heart-solid.svg' : 'heart.svg';
